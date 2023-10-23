@@ -6,6 +6,7 @@ import connectDb from './config/connectDb.js';
 import mongoose from 'mongoose';
 import AuthRoutes from './routes/authRoutes.js';
 import PostRoutes from './routes/postRoutes.js';
+import CommentRoutes from './routes/commentRoutes.js';
 
 
 dotenv.config();
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 
 app.use('/auth', AuthRoutes);
 app.use('/post', PostRoutes);
+app.use('/comment', CommentRoutes);
 
 mongoose.connection.once('open', () => {
     console.log('Connected To DB');

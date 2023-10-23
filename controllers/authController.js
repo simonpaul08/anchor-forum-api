@@ -3,6 +3,25 @@ import User from '../models/User.js';
 import { generate } from 'otp-generator';
 import nodemailer from 'nodemailer';
 
+
+// Get, get user by id 
+export const getUserById = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    if(!id){
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const user = await User.findById(id).lean().exec();
+
+    if(!user){
+        return res.status(400).json({ message: "User not found" });
+    }
+
+    let { name, ...args } = user;
+
+    res.status(200).json({ user: name });
+})
+
 // POST, verify OTP 
 export const verifyOTP = asyncHandler(async (req, res) => {
     const { email, otp } = req.body;
@@ -89,9 +108,9 @@ export const register = asyncHandler(async (req, res) => {
 
 // Post Login 
 export const login = asyncHandler(async (req, res) => {
-    const { email, name } = req.body;
+    const { email } = req.body;
 
-    if (!email || !name) {
+    if (!email) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -139,3 +158,5 @@ export const login = asyncHandler(async (req, res) => {
         res.status(400).json({ message: e })
     }
 })
+
+
