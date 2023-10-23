@@ -33,3 +33,37 @@ export const getAllPosts = asyncHandler(async (req, res) => {
         res.status(400).json({ message: "No posts found" })
     }
 })
+
+// Get, get post by id
+export const getPostById = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    if(!id) {
+        return res.status(400).json({ message: "Id is required" });
+    }
+
+    const post = await Post.findById(id).lean().exec();
+
+    if(post){
+        res.status(200).json({ post });
+    }else {
+        res.status(400).json({ message: "Post not found" });
+    }
+})
+
+// Get, get all posts by user id 
+export const getAllPostsByUserId = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    if(!id) {
+        return res.status(400).json({ message: "Id is required" });
+    }
+
+    const posts = await Post.find({ owner: id }).exec();
+
+    if(posts?.length){
+        res.status(200).json({ posts });
+    }else {
+        res.status(400).json({ message: "no posts found" })
+    }
+})
